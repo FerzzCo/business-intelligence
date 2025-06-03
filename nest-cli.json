@@ -1,14 +1,14 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/business-intelligence/src",
+  "sourceRoot": "apps/time-tracking/src",
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
-    "tsConfigPath": "apps/business-intelligence/tsconfig.app.json"
+    "tsConfigPath": "apps/time-tracking/tsconfig.app.json"
   },
   "monorepo": true,
-  "root": "apps/business-intelligence",
+  "root": "apps/time-tracking",
   "projects": {
     "auth": {
       "type": "library",
@@ -19,13 +19,13 @@
         "tsConfigPath": "libs/auth/tsconfig.lib.json"
       }
     },
-    "business-intelligence": {
-      "type": "application",
-      "root": "apps/business-intelligence",
-      "entryFile": "main",
-      "sourceRoot": "apps/business-intelligence/src",
+    "prisma": {
+      "type": "library",
+      "root": "libs/prisma",
+      "entryFile": "index",
+      "sourceRoot": "libs/prisma/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/business-intelligence/tsconfig.app.json"
+        "tsConfigPath": "libs/prisma/tsconfig.lib.json"
       }
     },
     "ticketing": {

@@ -24,6 +24,12 @@
       "@app/auth/*": [
         "libs/auth/src/*"
       ],
+      "@app/prisma": [
+        "libs/prisma/src"
+      ],
+      "@app/prisma/*": [
+        "libs/prisma/src/*"
+      ],
       "@app/user": [
         "libs/user/src"
       ],
