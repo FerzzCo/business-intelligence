@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/business-intelligence/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/business-intelligence/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/business-intelligence",
+  "projects": {
+    "auth": {
+      "type": "library",
+      "root": "libs/auth",
+      "entryFile": "index",
+      "sourceRoot": "libs/auth/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/auth/tsconfig.lib.json"
+      }
+    },
+    "business-intelligence": {
+      "type": "application",
+      "root": "apps/business-intelligence",
+      "entryFile": "main",
+      "sourceRoot": "apps/business-intelligence/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/business-intelligence/tsconfig.app.json"
+      }
+    },
+    "ticketing": {
+      "type": "application",
+      "root": "apps/ticketing",
+      "entryFile": "main",
+      "sourceRoot": "apps/ticketing/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/ticketing/tsconfig.app.json"
+      }
+    },
+    "time-tracking": {
+      "type": "application",
+      "root": "apps/time-tracking",
+      "entryFile": "main",
+      "sourceRoot": "apps/time-tracking/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/time-tracking/tsconfig.app.json"
+      }
+    },
+    "user": {
+      "type": "library",
+      "root": "libs/user",
+      "entryFile": "index",
+      "sourceRoot": "libs/user/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/user/tsconfig.lib.json"
+      }
+    }
+  }
+}
