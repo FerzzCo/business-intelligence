@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   ConflictException,
+  BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from '@app/prisma';
 import { Prisma } from '@prisma/client';
@@ -51,6 +52,22 @@ export class UserService {
       if (!user) {
         throw new NotFoundException(`User with id ${id} not found`);
       }
+
+      if (data.password !== undefined) {
+        if (typeof data.password === 'string') {
+          data.password = await bcrypt.hash(data.password, 10);
+        } else if (
+          typeof data.password === 'object' &&
+          data.password !== null &&
+          'set' in data.password &&
+          typeof data.password.set === 'string'
+        ) {
+          data.password = { set: await bcrypt.hash(data.password.set, 10) };
+        } else {
+          throw new BadRequestException('Invalid password format');
+        }
+      }
+
       return await this.prisma.user.update({ where: { id }, data });
     } catch (error) {
       if (error.code === 'P2002') {
