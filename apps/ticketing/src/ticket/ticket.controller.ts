@@ -29,14 +29,16 @@ export class TicketController {
   async create(@Req() req, @Body() dto: CreateTicketDto) {
     const userId = req.user.userId;
 
+    const { deadlineJalali, ...restDto } = dto;
+
     let deadline: Date | undefined;
-    if (dto.deadlineJalali) {
-      deadline = new Date(jalaliDateTimeToGregorian(dto.deadlineJalali));
+    if (deadlineJalali) {
+      deadline = new Date(jalaliDateTimeToGregorian(deadlineJalali));
     }
 
     const ticket = await this.ticketService.create(
       {
-        ...dto,
+        ...restDto,
         deadline,
       },
       userId,
@@ -67,15 +69,17 @@ export class TicketController {
   ) {
     const userId = req.user.userId;
 
+    const { deadlineJalali, ...restDto } = dto;
+
     let deadline: Date | undefined;
-    if (dto.deadlineJalali) {
-      deadline = new Date(jalaliDateTimeToGregorian(dto.deadlineJalali));
+    if (deadlineJalali) {
+      deadline = new Date(jalaliDateTimeToGregorian(deadlineJalali));
     }
 
     const ticket = await this.ticketService.update(
       id,
       {
-        ...dto,
+        ...restDto,
         deadline,
       },
       userId,
