@@ -62,13 +62,13 @@ export class UpdateTicketDto {
   type?: TicketType;
 
   @ApiProperty({
-    example: 3,
+    example: 'ce33f5b4-7bf7-4228-979d-1b525d966221',
     description: 'New assigned user ID',
     required: false,
   })
   @IsOptional()
   @IsInt()
-  assignedToId?: number;
+  assignedToId?: string;
 
   @ApiProperty({
     example: '1403-04-01T11:00:00',

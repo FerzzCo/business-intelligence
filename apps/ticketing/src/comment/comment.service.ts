@@ -11,7 +11,7 @@ import { UpdateCommentDto } from './dto/update-comment.dto';
 export class CommentService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async addComment(ticketId: string, dto: CreateCommentDto, userId: number) {
+  async addComment(ticketId: string, dto: CreateCommentDto, userId: string) {
     const ticket = await this.prisma.ticket.findUnique({
       where: { id: ticketId },
     });
@@ -36,7 +36,7 @@ export class CommentService {
     });
   }
 
-  async updateComment(id: number, dto: UpdateCommentDto, userId: number) {
+  async updateComment(id: number, dto: UpdateCommentDto, userId: string) {
     const comment = await this.prisma.ticketingComment.findUnique({
       where: { id },
     });
@@ -49,7 +49,7 @@ export class CommentService {
     });
   }
 
-  async deleteComment(id: number, userId: number) {
+  async deleteComment(id: number, userId: string) {
     const comment = await this.prisma.ticketingComment.findUnique({
       where: { id },
     });

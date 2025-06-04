@@ -12,7 +12,7 @@ import { AssignTicketDto } from './dto/assign-ticket.dto';
 export class TicketService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(dto: CreateTicketDto & { deadline?: Date }, userId: number) {
+  async create(dto: CreateTicketDto & { deadline?: Date }, userId: string) {
     return this.prisma.ticket.create({
       data: {
         ...dto,
@@ -41,7 +41,7 @@ export class TicketService {
   async update(
     id: string,
     dto: UpdateTicketDto & { deadline?: Date },
-    userId: number,
+    userId: string,
   ) {
     const ticket = await this.prisma.ticket.findUnique({ where: { id } });
     if (!ticket) throw new NotFoundException('Ticket not found');
@@ -56,7 +56,7 @@ export class TicketService {
     });
   }
 
-  async remove(id: string, userId: number) {
+  async remove(id: string, userId: string) {
     const ticket = await this.prisma.ticket.findUnique({ where: { id } });
     if (!ticket) throw new NotFoundException('Ticket not found');
     if (ticket.createdById !== userId)
@@ -65,7 +65,7 @@ export class TicketService {
     return this.prisma.ticket.delete({ where: { id } });
   }
 
-  async assign(id: string, dto: AssignTicketDto, userId: number) {
+  async assign(id: string, dto: AssignTicketDto, userId: string) {
     const ticket = await this.prisma.ticket.findUnique({ where: { id } });
     if (!ticket) throw new NotFoundException('Ticket not found');
     if (ticket.assignedToId !== userId)

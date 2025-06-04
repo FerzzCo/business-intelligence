@@ -8,7 +8,7 @@ import { UpdateTimeLogDto } from './dto/update-time-log.dto';
 export class TimeLogService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(dto: CreateTimeLogDto & { userId: number }): Promise<TimeLog> {
+  async create(dto: CreateTimeLogDto & { userId: string }): Promise<TimeLog> {
     return this.prisma.timeLog.create({
       data: {
         userId: dto.userId,
@@ -20,7 +20,7 @@ export class TimeLogService {
   }
 
   async findByUserAndDateRange(
-    userId: number,
+    userId: string,
     startDate: string,
     endDate: string,
   ): Promise<TimeLog[]> {
@@ -37,7 +37,7 @@ export class TimeLogService {
   }
 
   async getSummaryByDateRange(
-    userId: number,
+    userId: string,
     startDate: string,
     endDate: string,
   ): Promise<{ totalMinutes: number }> {

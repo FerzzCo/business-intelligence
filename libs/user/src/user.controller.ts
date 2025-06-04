@@ -61,14 +61,18 @@ export class UserController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Get user by ID' })
-  @ApiParam({ name: 'id', type: Number, example: 1 })
+  @ApiParam({
+    name: 'id',
+    type: String,
+    example: 'b7eab69f-df30-48d4-8a15-3575fc8e8dba',
+  })
   @ApiResponse({
     status: 200,
     description: 'User found.',
     type: UserResponseDto,
   })
   async findOne(@Param('id') id: string) {
-    const user = await this.userService.findOne(Number(id));
+    const user = await this.userService.findOne(id);
     return plainToInstance(UserResponseDto, user, {
       excludeExtraneousValues: true,
     });
@@ -78,14 +82,18 @@ export class UserController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Update user' })
-  @ApiParam({ name: 'id', type: Number, example: 1 })
+  @ApiParam({
+    name: 'id',
+    type: String,
+    example: 'b7eab69f-df30-48d4-8a15-3575fc8e8dba',
+  })
   @ApiResponse({
     status: 200,
     description: 'User updated.',
     type: UserResponseDto,
   })
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    const user = await this.userService.update(Number(id), updateUserDto);
+    const user = await this.userService.update(id, updateUserDto);
     return plainToInstance(UserResponseDto, user, {
       excludeExtraneousValues: true,
     });
@@ -95,14 +103,18 @@ export class UserController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Delete user' })
-  @ApiParam({ name: 'id', type: Number, example: 1 })
+  @ApiParam({
+    name: 'id',
+    type: String,
+    example: 'b7eab69f-df30-48d4-8a15-3575fc8e8dba',
+  })
   @ApiResponse({
     status: 200,
     description: 'User deleted.',
     type: UserResponseDto,
   })
   async remove(@Param('id') id: string) {
-    const user = await this.userService.remove(Number(id));
+    const user = await this.userService.remove(id);
     return plainToInstance(UserResponseDto, user, {
       excludeExtraneousValues: true,
     });

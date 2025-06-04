@@ -76,10 +76,14 @@ export class CreateTicketDto {
   @IsEnum(TicketType)
   type: TicketType;
 
-  @ApiProperty({ example: 2, description: 'Assigned user ID', required: false })
+  @ApiProperty({
+    example: 'ce33f5b4-7bf7-4228-979d-1b525d966221',
+    description: 'Assigned user ID',
+    required: false,
+  })
   @IsOptional()
   @IsInt()
-  assignedToId?: number;
+  assignedToId?: string;
 
   @ApiProperty({
     example: '1403-03-21T13:00:00',

@@ -9,7 +9,7 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
+  id        String    @id @default(uuid())
   email     String    @unique
   password  String
   firstName String
@@ -28,7 +28,7 @@ model User {
 
 model TimeLog {
   id        Int       @id @default(autoincrement())
-  userId    Int
+  userId    String
   user      User      @relation(fields: [userId], references: [id])
   clockIn   DateTime
   clockOut  DateTime?
@@ -45,9 +45,9 @@ model Ticket {
   priority        TicketPriority
   status          TicketStatus
   type            TicketType
-  createdById     Int
+  createdById     String
   createdBy       User        @relation("CreatedTickets", fields: [createdById], references: [id])
-  assignedToId    Int?
+  assignedToId    String?
   assignedTo      User?       @relation("AssignedTickets", fields: [assignedToId], references: [id])
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
@@ -65,7 +65,7 @@ model Ticket {
 model TicketingComment {
   id        Int      @id @default(autoincrement())
   content   String
-  userId    Int
+  userId    String
   user      User     @relation(fields: [userId], references: [id])
   ticketId  String
   ticket    Ticket   @relation(fields: [ticketId], references: [id])
