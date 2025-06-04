@@ -6,11 +6,21 @@ import {
   Param,
   Patch,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiParam,
+} from '@nestjs/swagger';
+import { JwtAuthGuard } from '@app/auth/jwt.guard';
+import { UserResponseDto } from './dto/user-response.dto';
+import { plainToInstance } from 'class-transformer';
 
 @ApiTags('User')
 @Controller('user')
@@ -18,37 +28,83 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  @ApiOperation({ summary: 'ثبت کاربر جدید' })
-  @ApiResponse({ status: 201, description: 'کاربر ساخته شد.' })
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  @ApiOperation({ summary: 'Create a new user' })
+  @ApiResponse({
+    status: 201,
+    description: 'User created.',
+    type: UserResponseDto,
+  })
+  async create(@Body() createUserDto: CreateUserDto) {
+    const user = await this.userService.create(createUserDto);
+    return plainToInstance(UserResponseDto, user, {
+      excludeExtraneousValues: true,
+    });
   }
 
   @Get()
-  @ApiOperation({ summary: 'لیست کاربران' })
-  @ApiResponse({ status: 200 })
-  findAll() {
-    return this.userService.findAll();
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'List all users' })
+  @ApiResponse({
+    status: 200,
+    description: 'All users.',
+    type: [UserResponseDto],
+  })
+  async findAll() {
+    const users = await this.userService.findAll();
+    return users.map((user) =>
+      plainToInstance(UserResponseDto, user, { excludeExtraneousValues: true }),
+    );
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'دریافت یک کاربر' })
-  @ApiResponse({ status: 200 })
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(Number(id));
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Get user by ID' })
+  @ApiParam({ name: 'id', type: Number, example: 1 })
+  @ApiResponse({
+    status: 200,
+    description: 'User found.',
+    type: UserResponseDto,
+  })
+  async findOne(@Param('id') id: string) {
+    const user = await this.userService.findOne(Number(id));
+    return plainToInstance(UserResponseDto, user, {
+      excludeExtraneousValues: true,
+    });
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: 'ویرایش کاربر' })
-  @ApiResponse({ status: 200 })
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(Number(id), updateUserDto);
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Update user' })
+  @ApiParam({ name: 'id', type: Number, example: 1 })
+  @ApiResponse({
+    status: 200,
+    description: 'User updated.',
+    type: UserResponseDto,
+  })
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    const user = await this.userService.update(Number(id), updateUserDto);
+    return plainToInstance(UserResponseDto, user, {
+      excludeExtraneousValues: true,
+    });
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'حذف کاربر' })
-  @ApiResponse({ status: 200 })
-  remove(@Param('id') id: string) {
-    return this.userService.remove(Number(id));
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Delete user' })
+  @ApiParam({ name: 'id', type: Number, example: 1 })
+  @ApiResponse({
+    status: 200,
+    description: 'User deleted.',
+    type: UserResponseDto,
+  })
+  async remove(@Param('id') id: string) {
+    const user = await this.userService.remove(Number(id));
+    return plainToInstance(UserResponseDto, user, {
+      excludeExtraneousValues: true,
+    });
   }
 }

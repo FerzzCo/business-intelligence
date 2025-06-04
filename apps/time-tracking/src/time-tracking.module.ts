@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
-import { TimeTrackingController } from './time-tracking.controller';
-import { TimeTrackingService } from './time-tracking.service';
+import { TimeLogModule } from './time-log/time-log.module';
+import { AuthModule } from '@app/auth';
+import { PrismaModule } from '@app/prisma';
+import { UserModule } from '@app/user';
 
 @Module({
-  imports: [],
-  controllers: [TimeTrackingController],
-  providers: [TimeTrackingService],
+  imports: [TimeLogModule, AuthModule, PrismaModule, UserModule],
+  controllers: [],
+  providers: [],
 })
 export class TimeTrackingModule {}

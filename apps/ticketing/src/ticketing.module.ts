@@ -1,10 +1,11 @@
+import { AuthModule } from '@app/auth';
+import { PrismaModule } from '@app/prisma';
+import { UserModule } from '@app/user';
 import { Module } from '@nestjs/common';
-import { TicketingController } from './ticketing.controller';
-import { TicketingService } from './ticketing.service';
 
 @Module({
-  imports: [],
-  controllers: [TicketingController],
-  providers: [TicketingService],
+  imports: [AuthModule, PrismaModule, UserModule],
+  controllers: [],
+  providers: [],
 })
 export class TicketingModule {}
