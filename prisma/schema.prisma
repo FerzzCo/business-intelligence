@@ -23,6 +23,7 @@ model User {
 
   createdTickets  Ticket[] @relation("CreatedTickets")
   assignedTickets Ticket[] @relation("AssignedTickets")
+  ticketingComments TicketingComment[]
 }
 
 model TimeLog {
@@ -52,10 +53,23 @@ model Ticket {
   updatedAt       DateTime    @updatedAt
   closedAt        DateTime?
   deadline        DateTime?
+
+  comments TicketingComment[]
+  
   @@index([status])
   @@index([priority])
   @@index([assignedToId])
   @@index([createdAt])
+}
+
+model TicketingComment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  ticketId  String
+  ticket    Ticket   @relation(fields: [ticketId], references: [id])
+  createdAt DateTime @default(now())
 }
 
 enum TicketPriority {
