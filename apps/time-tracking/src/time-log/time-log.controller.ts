@@ -24,19 +24,29 @@ import { CreateTimeLogDto } from './dto/create-time-log.dto';
 import { UpdateTimeLogDto } from './dto/update-time-log.dto';
 import { JwtAuthGuard } from '@app/auth';
 import * as jalaali from 'jalaali-js';
-import { jalaliDateTimeToGregorian, jalaliToGregorianString, mapTimeLogToJalaliClock } from '@app/utils';
+import {
+  jalaliDateTimeToGregorian,
+  jalaliToGregorianString,
+  mapTimeLogToJalaliClock,
+} from '@app/utils';
+import { UserService } from '@app/user';
 
 @ApiTags('TimeLog')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 @Controller('timelog')
 export class TimeLogController {
-  constructor(private readonly service: TimeLogService) {}
+  constructor(
+    private readonly service: TimeLogService,
+    private readonly userService: UserService,
+  ) {}
 
   @Get('me')
   @ApiResponse({ status: 200, description: 'Get current user info.' })
-  getMe(@Req() req: any) {
-    return req.user;
+  async getMe(@Req() req: any) {
+    const userId = req.user.userId;
+    const user = await this.userService.findOne(userId);
+    return user;
   }
 
   @Post()
