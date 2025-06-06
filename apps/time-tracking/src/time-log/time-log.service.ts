@@ -14,6 +14,7 @@ export class TimeLogService {
         userId: dto.userId,
         clockIn: new Date(dto.clockIn),
         clockOut: dto.clockOut ? new Date(dto.clockOut) : null,
+        title: dto.title,
         note: dto.note,
       },
     });
@@ -66,6 +67,7 @@ export class TimeLogService {
       data: {
         clockIn: dto.clockIn ? new Date(dto.clockIn) : undefined,
         clockOut: dto.clockOut ? new Date(dto.clockOut) : undefined,
+        title: dto.title,
         note: dto.note,
       },
     });

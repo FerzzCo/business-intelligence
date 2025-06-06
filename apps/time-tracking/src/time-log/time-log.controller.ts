@@ -117,14 +117,38 @@ export class TimeLogController {
     const startStr = jalaliToGregorianString(y, m, 1);
     const lastDay = jalaali.jalaaliMonthLength(y, m);
     const endStr = jalaliToGregorianString(y, m, lastDay);
+    // Get all logs for the month
     const logs = await this.service.findByUserAndDateRange(
       userId,
       startStr,
       endStr,
     );
-    return Array.isArray(logs)
-      ? logs.map(mapTimeLogToJalaliClock)
-      : mapTimeLogToJalaliClock(logs);
+    // Group logs by Jalali date
+    const grouped: Record<string, any[]> = {};
+    for (const log of logs) {
+      const jalaliDate = mapTimeLogToJalaliClock(log).clockIn.split(' ')[0]; // e.g., "1403-03-21"
+      if (!grouped[jalaliDate]) grouped[jalaliDate] = [];
+      grouped[jalaliDate].push(log);
+    }
+    // For each day, return summary (e.g., total worked minutes)
+    const result: Record<string, any> = {};
+    for (const date in grouped) {
+      const dayLogs = grouped[date].map(mapTimeLogToJalaliClock);
+      // Calculate total worked minutes for the day
+      let totalMinutes = 0;
+      for (const log of grouped[date]) {
+        if (log.clockIn && log.clockOut) {
+          const start = new Date(log.clockIn).getTime();
+          const end = new Date(log.clockOut).getTime();
+          totalMinutes += Math.floor((end - start) / 60000);
+        }
+      }
+      result[date] = {
+        logs: dayLogs,
+        totalMinutes,
+      };
+    }
+    return result;
   }
 
   @Get('day/summary')

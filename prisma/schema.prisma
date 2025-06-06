@@ -32,6 +32,7 @@ model TimeLog {
   user      User      @relation(fields: [userId], references: [id])
   clockIn   DateTime
   clockOut  DateTime?
+  title     String
   note      String?
   createdAt DateTime  @default(now())
   isDeleted Boolean   @default(false)

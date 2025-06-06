@@ -2,8 +2,12 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsOptional } from 'class-validator';
 
 export class CreateTimeLogDto {
+  @ApiProperty({ example: 'جلسه با تیم فنی', required: false })
+  @IsString()
+  title: string;
+
   @ApiProperty({
-    example: '1403-03-20T09:00:00', 
+    example: '1403-03-20T09:00:00',
     description: 'Clock in (Jalali, e.g. 1403-03-20T09:00:00)',
   })
   @IsString()
