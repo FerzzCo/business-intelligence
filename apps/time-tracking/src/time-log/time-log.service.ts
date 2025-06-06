@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@app/prisma';
 import { TimeLog } from '@prisma/client';
 import { CreateTimeLogDto } from './dto/create-time-log.dto';
@@ -9,6 +9,24 @@ export class TimeLogService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreateTimeLogDto & { userId: string }): Promise<TimeLog> {
+    const clockIn = new Date(dto.clockIn);
+    const clockOut = dto.clockOut ? new Date(dto.clockOut) : null;
+
+    const duplicate = await this.prisma.timeLog.findFirst({
+      where: {
+        userId: dto.userId,
+        clockIn,
+        clockOut,
+        isDeleted: false,
+      },
+    });
+
+    if (duplicate) {
+      throw new ConflictException(
+        'لاگی با این زمان شروع و پایان قبلاً ثبت شده است.',
+      );
+    }
+
     return this.prisma.timeLog.create({
       data: {
         userId: dto.userId,
